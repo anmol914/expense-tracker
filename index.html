@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Expense Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">₹</span>
+      <span class="brand-name">Your Expense Tracker</span>
+    </div>
+
+    <div class="month-nav">
+      <button id="prevMonth" class="icon-btn" aria-label="Previous month">‹</button>
+      <span id="monthLabel" class="month-label">September 2026</span>
+      <button id="nextMonth" class="icon-btn" aria-label="Next month">›</button>
+    </div>
+
+    <div class="balance-block">
+      <span class="balance-label">Spent this month</span>
+      <span id="totalSpent" class="balance-figure">$0.00</span>
+    </div>
+  </header>
+
+  <!-- Alert banner -->
+  <div id="alertBanner" class="alert-banner" hidden>
+    <div id="alertList" class="alert-list"></div>
+  </div>
+
+  <main class="layout">
+
+    <!-- Left column: entry + budgets -->
+    <section class="col-left">
+
+      <div class="panel">
+        <h2 class="panel-title">New entry</h2>
+        <form id="expenseForm" class="entry-form">
+          <div class="field">
+            <label for="amount">Amount</label>
+            <div class="amount-wrap">
+              <span class="currency-sign">₹</span>
+              <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="0.00" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="Coffee, rent, groceries…" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category" name="category" required></select>
+            </div>
+            <div class="field">
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Add to ledger</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Monthly budgets</h2>
+          <button id="editBudgets" class="link-btn">Edit</button>
+        </div>
+        <ul id="budgetList" class="budget-list"></ul>
+      </div>
+
+    </section>
+
+    <!-- Right column: charts + ledger -->
+    <section class="col-right">
+
+      <div class="panel charts-panel">
+        <div class="chart-block">
+          <h2 class="panel-title">Spend by category</h2>
+          <div class="chart-holder chart-holder--donut">
+            <canvas id="categoryChart"></canvas>
+          </div>
+          <p id="categoryEmpty" class="empty-note" hidden>No expenses logged yet this month.</p>
+        </div>
+        <div class="chart-block">
+          <h2 class="panel-title">Daily spend</h2>
+          <div class="chart-holder chart-holder--bars">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel ledger-panel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Ledger</h2>
+          <span id="entryCount" class="entry-count">0 entries</span>
+        </div>
+
+        <div class="ledger-table-wrap">
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th class="col-date">Date</th>
+                <th class="col-desc">Description</th>
+                <th class="col-cat">Category</th>
+                <th class="col-amt">Amount</th>
+                <th class="col-run">Running total</th>
+                <th class="col-del"></th>
+              </tr>
+            </thead>
+            <tbody id="ledgerBody">
+            </tbody>
+          </table>
+          <p id="ledgerEmpty" class="empty-note" hidden>Nothing logged for this month yet. Add your first entry on the left.</p>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
+<!-- Budget edit dialog -->
+<dialog id="budgetDialog" class="budget-dialog">
+  <form id="budgetForm" method="dialog">
+    <h2 class="panel-title">Set monthly budgets</h2>
+    <p class="dialog-sub">Leave a field at 0 to track spend without a limit.</p>
+    <div id="budgetFields" class="budget-fields"></div>
+    <div class="dialog-actions">
+      <button type="button" id="cancelBudgets" class="btn-ghost">Cancel</button>
+      <button type="submit" class="btn-primary">Save budgets</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
